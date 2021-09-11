@@ -7,6 +7,14 @@ const state = {
 const getters = {
     projects: state => {
         return state.projects
+    },
+
+    getProjectByName: (state) => (name) => {
+        if (Array.isArray(state.projects)) {
+            return state.projects.find(project => project.name === name)
+        }
+
+        return {}
     }
 }
 

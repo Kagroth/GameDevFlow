@@ -4,7 +4,7 @@
       <v-btn @click="clearProjects" color="error">Clear projects</v-btn>
     </v-app-bar>
     <v-container>
-      <v-row align="center" justify="center">
+      <v-row align="center">
         <v-col cols="3">
           <v-hover v-slot="{ hover }">
             <v-card
@@ -14,21 +14,36 @@
             >
               <v-card-title></v-card-title>
               <v-card-text class="text-h4">
-                Create new project
-                <br />
-                <v-icon color="primary" large class="pt-5">mdi-plus</v-icon>
+                <v-row>
+                  <v-col cols="12">
+                    Create new project
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-icon color="primary" large>mdi-plus</v-icon>
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-hover>
         </v-col>
         <v-col cols="3" v-for="(project, index) in projects" :key="`${project.name}-${index}`">
           <v-hover v-slot="{ hover }">
-            <v-card :elevation="hover ? 20 : 2" height="200px">
+            <v-card :elevation="hover ? 20 : 2" height="200px" @click="goToProject(project.name)">
               <v-card-title></v-card-title>
               <v-card-text class="text-h4">
-                {{ project.name }}
+                <v-row>
+                  <v-col cols="12">
+                    {{ project.name }}
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-icon color="warning" large>mdi-google-controller</v-icon>
+                  </v-col>
+                </v-row>
                 <br/>
-                <v-icon color="warning" large class="pt-5">mdi-google-controller</v-icon>
               </v-card-text>
             </v-card>
           </v-hover>
@@ -67,7 +82,27 @@ export default {
         return;
       }
 
-      this.$store.commit("home/addProject", this.projectName)
+      if (!Array.isArray(this.projects)) {
+        this.$store.commit("home/addProject", this.projectName);
+        this.projectCreatorModal = false;
+        this.projectName = "";
+        return;
+      }
+
+      const projectNames = this.projects.map(project => project.name)
+      
+      if (projectNames.includes(this.projectName)) {
+        console.log("Project name already taken")
+        return;  
+      }
+
+      this.$store.commit("home/addProject", this.projectName);
+      this.projectCreatorModal = false;
+      this.projectName = "";
+    },
+
+    goToProject(projectName) {
+      this.$router.push({name: 'ProjectView', params: {projectName: projectName}});
     },
 
     clearProjects() {
