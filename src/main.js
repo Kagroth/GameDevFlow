@@ -13,7 +13,14 @@ new Vue({
   render: h => h(App),
 
   created() {
-    store.commit("home/init")
+    const modules = store._modulesNamespaceMap
+    for (const module in modules) {
+      if (module === "") {
+        continue
+      }
+
+      store.commit(`${module}init`)
+    }
   }
 
 }).$mount('#app')
