@@ -30,12 +30,12 @@ const routes = [
       {
         path: 'dev-board',
         name: 'DevBoard',
-        // component: () => import()
+        component: () => import("@/views/ProjectNestedViews/DevBoard")
       },
       {
         path: 'stats-board',
         name: 'StatsBoard',
-        // component: () => import()
+        component: () => import("@/views/ProjectNestedViews/StatsBoard")
       }
     ]
   }

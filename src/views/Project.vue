@@ -1,7 +1,6 @@
 <template>
     <div>
-        <project-header></project-header>
-        {{project}}
+        <project-header :project="project"></project-header>
         <v-container>
             <router-view></router-view>
         </v-container>
