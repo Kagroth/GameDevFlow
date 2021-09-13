@@ -13,6 +13,7 @@
                         small
                         icon
                         outlined
+                        tile
                         color="primary"
                         @click="openCardCreator"
                         v-on="on"
@@ -45,8 +46,8 @@
 
     <!--  Dialogs -->
     <div>
-        <v-dialog v-model="isCardCreatorVisible" width="800">
-            <card-creator @create-card="onCardCreate"></card-creator>
+        <v-dialog v-model="isCardCreatorVisible" width="1000" persistent>
+            <card-creator @create-card="onCardCreate" @cancel="isCardCreatorVisible = false"></card-creator>
         </v-dialog>
     </div>
   </div>
