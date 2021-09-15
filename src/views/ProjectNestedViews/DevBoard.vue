@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-row>
           <v-col :cols="firstCol">
-            <dev-card-container title="Backlog" :cards="gameElements">
+            <dev-card-container title="Backlog" :cards="cards">
               <template v-slot:header-control>
                 <div>
                   <v-tooltip bottom open-delay="1000">
@@ -67,9 +67,13 @@ export default {
   data() {
     return {
       firstCol: 3,
-      gameElements: [],
+      // gameElements: [],
       isCardCreatorVisible: false,
     };
+  },
+
+  created() {
+    this.$store.commit("devBoard/loadCards", this.$route.params.projectName)
   },
 
   methods: {
@@ -87,8 +91,15 @@ export default {
     },
 
     onCardCreate(createdCardData) {
-        this.gameElements.push(createdCardData)
+        // this.gameElements.push(createdCardData)
+        this.$store.commit("devBoard/addCard", createdCardData)
     }
   },
+
+  computed: {
+    cards() {
+      return this.$store.getters['devBoard/cards']
+    }
+  }
 };
 </script>
