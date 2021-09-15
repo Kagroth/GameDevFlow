@@ -6,10 +6,16 @@ const state = {
 }
 
 const getters = {
-
+    cards: state => {
+        return state.cards
+    }
 }
 
 const mutations = {
+    init() {
+
+    },
+
     saveCards(state, projectName) {
         const fieldName = `${projectName}-dev-board-cards`
         saveToLocalStorage(fieldName, state.cards)

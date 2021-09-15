@@ -41,7 +41,9 @@ export class GameEntityFSM {
 }
 
 export class GameCard {
-    constructor(gameCardComponents) {
+    constructor(title, gameCardComponents, gameEntityFSM) {
+        this.title = title
         this.gameCardComponents = gameCardComponents
+        this.gameEntityFSM = gameEntityFSM
     }
 }
