@@ -268,7 +268,7 @@ export default {
     },
 
     addEntityComponent(component) {
-      const newComponent = new GameCardComponent(component, "", 0);
+      const newComponent = new GameCardComponent(component, "", 0, this.initCardState);
 
       if (this.cardTab === this.cardTabs.COMPONENTS) {
         this.newCard.entityComponents.push(newComponent);
@@ -312,7 +312,7 @@ export default {
 
         return acc;
       }, {});
-      console.log(componentsByType);
+
       return componentsByType;
     },
   },
@@ -321,6 +321,10 @@ export default {
     gameEntityComponents() {
       return this.$store.getters["cardComponents/components"];
     },
+
+    initCardState() {
+      return this.$store.getters["cardComponents/INIT_CARD_STATE"]
+    }
   },
 };
 </script>

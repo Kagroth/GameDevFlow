@@ -7,10 +7,11 @@ export default class GameEntityComponent {
 }
 
 export class GameCardComponent {
-    constructor(gameEntityComponent, title, effort, description) {
+    constructor(gameEntityComponent, title, effort, cardState, description) {
         this.gec = gameEntityComponent
         this.title = title
         this.effort = effort
+        this.cardState = cardState
         this.description = description
     }
 }
