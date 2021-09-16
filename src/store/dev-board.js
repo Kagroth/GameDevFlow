@@ -8,6 +8,16 @@ const state = {
 const getters = {
     cards: state => {
         return state.cards
+    },
+
+    cardsWithComponentsToPrototype: (state, getters, rootState, rootGetters) => {
+        const TO_PROTOTYPE = rootGetters['cardComponents/CARD_STATES']['NOT_STARTED']
+        // To do: Check for components in FSM
+        return state.cards.filter(card => {
+            return card.gameCardComponents.some(component => {
+               return component.cardState == TO_PROTOTYPE
+            })
+        })
     }
 }
 

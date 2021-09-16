@@ -3,8 +3,8 @@
     <v-card>
       <v-card-title>
           <v-row>
-              <v-col cols="6" class="text-left">{{ title }}</v-col>
-              <v-col cols="6" class="text-right">
+              <v-col :cols="hasHeaderControlSlot ? 8 : 12" :class="[`text-left`, titleDense ? `text-subtitle-2` : `` ]">{{ title }}</v-col>
+              <v-col cols="4" class="text-right" v-if="hasHeaderControlSlot">
                   <slot name="header-control"></slot>
               </v-col>
           </v-row>
@@ -23,6 +23,7 @@
 export default {
     props: {
         title: String,
+        titleDense: Boolean,
         cards: Array
     },
 
@@ -34,6 +35,12 @@ export default {
 
     methods: {
 
+    },
+
+    computed: {
+        hasHeaderControlSlot() {
+            return !!this.$slots['header-control']
+        }
     }
 }
 </script>

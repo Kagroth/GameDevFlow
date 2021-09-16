@@ -8,7 +8,7 @@
     <v-row>
       <v-col cols="12">
         <v-row>
-          <v-col :cols="firstCol">
+          <v-col cols="2" class="px-1">
             <dev-card-container title="Backlog" :cards="cards">
               <template v-slot:header-control>
                 <div>
@@ -36,13 +36,13 @@
               </template>
             </dev-card-container>
           </v-col>
-          <v-col cols="3">
-            <dev-card-container title="To do"></dev-card-container>
+          <v-col cols="4" class="px-1">
+            <to-do-dev-card-container></to-do-dev-card-container>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="3" class="px-1">
             <dev-card-container title="In Progress"></dev-card-container>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="3" class="px-1">
             <dev-card-container title="Done"></dev-card-container>
           </v-col>
         </v-row>
@@ -59,12 +59,14 @@
 </template>
 <script>
 import DevCardContainer from "@/components/DevCardContainer";
+import ToDoDevCardContainer from "@/components/ToDoDevCardContainer";
 import DevCard from "@/components/DevCard";
 import CardCreator from "@/components/CardCreator"
 
 export default {
   components: {
     "dev-card-container": DevCardContainer,
+    "to-do-dev-card-container": ToDoDevCardContainer,
     "dev-card": DevCard,
     "card-creator": CardCreator,
   },
@@ -72,7 +74,6 @@ export default {
   data() {
     return {
       firstCol: 3,
-      // gameElements: [],
       isCardCreatorVisible: false,
     };
   },
@@ -100,7 +101,6 @@ export default {
     },
 
     onCardCreate(createdCardData) {
-        // this.gameElements.push(createdCardData)
         this.$store.commit("devBoard/addCard", createdCardData)
     },
 
