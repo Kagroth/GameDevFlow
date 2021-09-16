@@ -20,7 +20,7 @@
                 {{ componentsGroup.length }}
               </v-chip>
             </span>
-            <span>
+            <span v-if="card.gameEntityFSM.states.length > 0">
                 <v-chip label outlined small>
                     <v-icon color="primary" left small>mdi-state-machine</v-icon>
                     {{ card.gameEntityFSM.states.length }}
@@ -34,17 +34,33 @@
         </v-row>
       </v-card-text>
     </v-card>
+
+    <v-dialog v-model="showCardDetails" width="1000">
+      <dev-card-details :card="card" :totalEffort="totalEffort"></dev-card-details>
+    </v-dialog>
   </div>
 </template>
 <script>
+import DevCardDetails from '@/components/DevCardDetails'
+
 export default {
   props: {
     card: Object,
   },
 
+  components: {
+    "dev-card-details": DevCardDetails
+  },
+
+  data() {
+    return {
+      showCardDetails: false
+    }
+  },
+
   methods: {
     showCard() {
-      // show card on click
+      this.showCardDetails = true
     },
 
     groupComponentsByType(componentsList) {
@@ -57,7 +73,7 @@ export default {
 
         return acc;
       }, {});
-      console.log(componentsByType);
+
       return componentsByType;
     },
 

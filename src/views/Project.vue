@@ -1,7 +1,7 @@
 <template>
     <div>
         <project-header :project="project"></project-header>
-        <v-container>
+        <v-container fluid>
             <router-view></router-view>
         </v-container>
     </div>
