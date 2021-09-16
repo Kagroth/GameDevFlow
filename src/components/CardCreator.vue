@@ -47,61 +47,13 @@
               <v-divider vertical></v-divider>
               <v-col cols="8">
                 <v-expansion-panels tile hover>
-                  <v-expansion-panel
+                  <card-component-expansion-panel
                     v-for="(ec, index) in newCard.entityComponents"
                     :key="`ec-${index}`"
+                    :cardComponent="ec"
+                    @remove-entity-component="removeEntityComponent"
                   >
-                    <v-expansion-panel-header>
-                      <v-row align="center">
-                        <v-col cols="2">
-                          <v-icon :color="ec.gec.color">{{
-                            ec.gec.icon
-                          }}</v-icon>
-                        </v-col>
-                        <v-col cols="6">
-                          <div v-if="ec.title">
-                            {{ ec.title.substr(0, 20) }}
-                          </div>
-                          <div v-else>
-                            {{ ec.gec.name }}
-                          </div>
-                        </v-col>
-                        <v-col cols="3" v-if="ec.effort" class="text-right">
-                          {{ ec.effort }} h
-                          <v-icon left small color="primary"
-                            >mdi-timer-sand</v-icon
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                      <v-row>
-                        <v-col cols="8">
-                          <v-text-field
-                            label="Title"
-                            v-model="ec.title"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="4">
-                          <v-text-field
-                            label="Effort Hours"
-                            v-model="ec.effort"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" class="text-right">
-                          <v-btn
-                            tile
-                            color="red darken-3"
-                            small
-                            @click="removeEntityComponent(index)"
-                            >Remove</v-btn
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
+                  </card-component-expansion-panel>
                 </v-expansion-panels>
               </v-col>
             </v-row>
@@ -118,86 +70,57 @@
                   <v-icon left>mdi-plus</v-icon>
                   New State
                 </v-btn>
-                <v-btn
-                  block
-                  tile
-                  v-for="(state, index) in newCard.fsm.states"
-                  :key="`state-${index}`"
-                  class="mt-1"
-                  :disabled="entityStateContext.index === index"
-                  @click="setEntityStateContext(index)"
-                >
-                  {{ state.name }}
-                </v-btn>
+                <v-row class="pt-3">
+                  <v-col
+                    cols="12"
+                    v-for="(state, index) in newCard.fsm.states"
+                    :key="`state-${index}`"
+                    class="py-1"
+                  >
+                    <v-row>
+                      <v-col cols="3" v-if="entityStateContext.index === index" class="pt-3 pb-2">
+                        <v-btn color="red darken-2" block tile text @click="deleteEntityState(index)">
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col :cols="entityStateContext.index === index ? '9' : '12'" class="py-2">
+                        <v-btn
+                          block
+                          tile
+                          class="mt-1"
+                          :disabled="entityStateContext.index === index"
+                          @click="setEntityStateContext(index)"
+                        >
+                          {{ state.name.substr(0, 10) }}
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
               </v-col>
               <v-divider vertical></v-divider>
               <v-col cols="5">
                 <div v-if="entityStateContext.state">
-                  <v-text-field
-                    outlined
-                    label="State name"
-                    v-model="entityStateContext.state.name"
-                  ></v-text-field>
+                  <div>
+                    <v-text-field
+                      outlined
+                      dense
+                      label="State name"
+                      v-model="entityStateContext.state.name"
+                    ></v-text-field>
+                  </div>
+                  <v-divider></v-divider>
+                  <v-expansion-panels tile hover>
+                    <card-component-expansion-panel
+                      v-for="(ec, index) in entityStateContext.state
+                        .gameCardComponents"
+                      :key="`ec-${index}`"
+                      :cardComponent="ec"
+                      @remove-entity-component="removeEntityComponent"
+                    >
+                    </card-component-expansion-panel>
+                  </v-expansion-panels>
                 </div>
-                <v-divider></v-divider>
-                <v-expansion-panels tile hover>
-                  <v-expansion-panel
-                    v-for="(ec, index) in entityStateContext.state
-                      .gameCardComponents"
-                    :key="`ec-${index}`"
-                  >
-                    <v-expansion-panel-header>
-                      <v-row align="center">
-                        <v-col cols="2">
-                          <v-icon :color="ec.gec.color">{{
-                            ec.gec.icon
-                          }}</v-icon>
-                        </v-col>
-                        <v-col cols="6">
-                          <div v-if="ec.title">
-                            {{ ec.title.substr(0, 12) }}
-                          </div>
-                          <div v-else>
-                            {{ ec.gec.name }}
-                          </div>
-                        </v-col>
-                        <v-col cols="3" v-if="ec.effort" class="text-right">
-                          {{ ec.effort }} h
-                          <v-icon left small color="primary"
-                            >mdi-timer-sand</v-icon
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                      <v-row>
-                        <v-col cols="8">
-                          <v-text-field
-                            label="Title"
-                            v-model="ec.title"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="4">
-                          <v-text-field
-                            label="Effort Hours"
-                            v-model="ec.effort"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col cols="12" class="text-right">
-                          <v-btn
-                            tile
-                            color="red darken-3"
-                            small
-                            @click="removeEntityComponent(index)"
-                            >Remove</v-btn
-                          >
-                        </v-col>
-                      </v-row>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
               </v-col>
               <v-divider vertical></v-divider>
               <v-col cols="4">
@@ -277,7 +200,6 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row class="text-left"> </v-row>
       </v-card-text>
 
       <v-card-actions>
@@ -296,7 +218,13 @@ import {
   GameCard,
 } from "@/game-dev-flow/core/index";
 
+import CardComponentExpansionPanel from "@/components/CardComponentExpansionPanel";
+
 export default {
+  components: {
+    "card-component-expansion-panel": CardComponentExpansionPanel,
+  },
+
   data() {
     return {
       cardTab: 0,
@@ -340,7 +268,7 @@ export default {
     },
 
     addEntityComponent(component) {
-      const newComponent = new GameCardComponent(component);
+      const newComponent = new GameCardComponent(component, "", 0);
 
       if (this.cardTab === this.cardTabs.COMPONENTS) {
         this.newCard.entityComponents.push(newComponent);
@@ -361,6 +289,12 @@ export default {
       const index = this.newCard.fsm.states.length;
       const ges = new GameEntityState(`State ${index}`, []);
       this.newCard.fsm.addState(ges);
+    },
+
+    deleteEntityState(index) {
+      this.entityStateContext.index = "";
+      this.entityStateContext.state = "";
+      this.newCard.fsm.states.splice(index, 1);
     },
 
     setEntityStateContext(index) {
