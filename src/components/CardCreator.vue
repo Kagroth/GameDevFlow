@@ -60,7 +60,7 @@
                         </v-col>
                         <v-col cols="6">
                           <div v-if="ec.title">
-                            {{ ec.title.substr(0, 12) }}
+                            {{ ec.title.substr(0, 20) }}
                           </div>
                           <div v-else>
                             {{ ec.gec.name }}
@@ -224,23 +224,60 @@
       <v-card-title>Summary</v-card-title>
       <v-card-text>
         <v-row class="text-left">
-          <v-col>
+          <v-col cols="4">
             Components:
             <span
-              v-for="(componentsGroup, index) in groupComponentsByType()"
+              v-for="(componentsGroup, index) in groupComponentsByType(
+                newCard.entityComponents
+              )"
               :key="`component-by-group-${index}`"
             >
-            <v-chip class="mr-1" label outlined>
-              <v-icon :color="componentsGroup[0].gec.color" dense left small>
-                {{ componentsGroup[0].gec.icon }}
-              </v-icon>
-              {{ componentsGroup.length }}</v-chip>
+              <v-chip class="mr-1" label outlined>
+                <v-icon :color="componentsGroup[0].gec.color" dense left small>
+                  {{ componentsGroup[0].gec.icon }}
+                </v-icon>
+                {{ componentsGroup.length }}</v-chip
+              >
             </span>
           </v-col>
+          <v-divider vertical></v-divider>
+          <v-col cols="8">
+            <v-row>
+              <v-col cols="2" class="pt-2"> States: </v-col>
+              <v-col cols="10">
+                <v-row>
+                  <v-col
+                    cols="12"
+                    v-for="(state, index) in newCard.fsm.states"
+                    :key="`state-${index}`"
+                    class="pa-1"
+                  >
+                    {{ state.name }}:
+                    <span
+                      v-for="(componentsGroup, index) in groupComponentsByType(
+                        state.gameCardComponents
+                      )"
+                      :key="`state-component-by-group-${index}`"
+                    >
+                      <v-chip class="mr-1" label outlined>
+                        <v-icon
+                          :color="componentsGroup[0].gec.color"
+                          dense
+                          left
+                          small
+                        >
+                          {{ componentsGroup[0].gec.icon }}
+                        </v-icon>
+                        {{ componentsGroup.length }}</v-chip
+                      >
+                    </span>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
-        <v-row class="text-left">
-          <v-col> States: {{ newCard.fsm }} </v-col>
-        </v-row>
+        <v-row class="text-left"> </v-row>
       </v-card-text>
 
       <v-card-actions>
@@ -331,19 +368,16 @@ export default {
       this.entityStateContext.state = this.newCard.fsm.states[index];
     },
 
-    groupComponentsByType() {
-      const componentsByType = this.newCard.entityComponents.reduce(
-        (acc, component) => {
-          if (!Object.prototype.hasOwnProperty.call(acc, component.gec.name)) {
-            acc[component.gec.name] = [];
-          }
+    groupComponentsByType(componentsList) {
+      const componentsByType = componentsList.reduce((acc, component) => {
+        if (!Object.prototype.hasOwnProperty.call(acc, component.gec.name)) {
+          acc[component.gec.name] = [];
+        }
 
-          acc[component.gec.name].push(component);
+        acc[component.gec.name].push(component);
 
-          return acc;
-        },
-        {}
-      );
+        return acc;
+      }, {});
       console.log(componentsByType);
       return componentsByType;
     },

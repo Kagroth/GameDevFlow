@@ -30,9 +30,15 @@ const mutations = {
         }
     },
 
+    clearCards(state, projectName) {
+        state.cards = []
+        const fieldName = `${projectName}-dev-board-cards`
+        saveToLocalStorage(fieldName, state.cards)
+    },
+
     addCard(state, card) {
         state.cards.push(card)
-    }
+    },
 }
 
 const actions = {

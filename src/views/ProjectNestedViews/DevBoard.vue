@@ -1,6 +1,11 @@
 <template>
   <div>
     <v-row>
+      <v-col cols="2">
+        <v-btn color="red darken-2" @click="clearCards" tile>Clear cards</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col cols="12">
         <v-row>
           <v-col :cols="firstCol">
@@ -73,6 +78,10 @@ export default {
   },
 
   created() {
+    window.addEventListener("unload", () => {
+      this.$store.commit("devBoard/saveCards", this.$route.params.projectName)
+    })
+
     this.$store.commit("devBoard/loadCards", this.$route.params.projectName)
   },
 
@@ -93,6 +102,10 @@ export default {
     onCardCreate(createdCardData) {
         // this.gameElements.push(createdCardData)
         this.$store.commit("devBoard/addCard", createdCardData)
+    },
+
+    clearCards() {
+      this.$store.commit("devBoard/clearCards", this.$route.params.projectName)
     }
   },
 
@@ -100,6 +113,11 @@ export default {
     cards() {
       return this.$store.getters['devBoard/cards']
     }
+  },
+
+  beforeRouteLeave (to, from, next) {
+    this.$store.commit("devBoard/saveCards", this.$route.params.projectName)
+    next()
   }
 };
 </script>
