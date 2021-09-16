@@ -28,7 +28,7 @@
             </span>
           </v-col>
           <v-col cols="4" class="text-right">
-              {{ totalEffort() }}
+              {{ totalEffort }}
               <v-icon color="primary" small>mdi-timer-sand</v-icon>
           </v-col>
         </v-row>
@@ -61,16 +61,17 @@ export default {
       return componentsByType;
     },
 
-    totalEffort() {
+    calculateTotalEffort() {
         let effort = 0
 
-        for (let gameComponent in this.card.gameCardComponents) {
-            effort += new Number(gameComponent.effort)
+        for (let gameComponent of this.card.gameCardComponents) {
+            effort += gameComponent.effort
         }
 
-        for (let fsmState in this.card.gameEntityFSM.states) {
-            for (let gameComponent in fsmState.gameCardComponents) {
-                effort += new Number(gameComponent.effort)
+        for (let fsmState of this.card.gameEntityFSM.states) {
+            for (let gameComponent of fsmState.gameCardComponents) {
+              console.log(gameComponent.effort);
+                effort += gameComponent.effort
             }
         }
 
@@ -78,6 +79,10 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    totalEffort() {
+      return this.calculateTotalEffort()
+    }
+  },
 };
 </script>
