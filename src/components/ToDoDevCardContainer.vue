@@ -30,43 +30,72 @@
           <v-col cols="12">
             <v-tabs-items v-model="selectedTab">
               <v-tab-item>
-                <v-expansion-panels>
-                  <v-expansion-panel
-                    v-for="(card, index) in cardsWithToPrototypeComponents"
-                    :key="`card-to-prototype-${index}`"
+                <v-row
+                  v-for="(card, index) in cardsWithToPrototypeComponents"
+                  :key="`card-to-prototype-${index}`"
+                >
+                  <v-col
+                    cols="12"
+                    v-for="(
+                      cardComponent, index
+                    ) in getComponentsToPrototypeFromArray(
+                      card.gameCardComponents
+                    )"
+                    :key="`card-component-to-prototype-${index}`"
                   >
-                    <v-expansion-panel-header>{{
-                      card.title
-                    }}</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                      <span
-                        v-for="(
-                          cardComponent, index
-                        ) in getComponentsToPrototypeFromArray(card.gameCardComponents)"
-                        :key="`card-component-to-prototype-${index}`"
-                      >
-                        {{ cardComponent.gec.name }}
-                      </span>
-                      <div></div>
-                      <span
-                        v-for="(
-                          state, index
-                        ) in card.gameEntityFSM.states"
-                        :key="`card-to-prototype-state${index}`"
-                      >
-                        {{ state.name }}
-                        <span
+                    <v-card outlined flat tile>
+                      <v-card-title class="pa-0">
+                        <v-progress-linear value="0" :color="cardComponent.gec.color"></v-progress-linear>
+                      </v-card-title>
+                      <v-card-title class="text-subtitle-1 pb-1">
+                        <v-row>
+                          <v-col cols="2">
+                            <v-icon :color="cardComponent.gec.color">{{
+                              cardComponent.gec.icon
+                            }}</v-icon>
+                          </v-col>
+                          <v-col cols="10">
+                            <span v-if="cardComponent.title">
+                              {{ cardComponent.title }}
+                            </span>
+                            <span v-else>
+                              {{ cardComponent.gec.name }}
+                            </span>
+                          </v-col>
+                        </v-row>
+                      </v-card-title>
+                      <v-card-subtitle>
+                        <v-row>
+                          <v-spacer></v-spacer>
+                          <v-col cols="10">
+                            {{ card.title }}
+                          </v-col>
+                        </v-row>
+                      </v-card-subtitle>
+                      <v-card-text>
+                        Estimated time: {{ cardComponent.effort }}
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    v-for="(state, index) in card.gameEntityFSM.states"
+                    :key="`card-to-prototype-state${index}`"
+                  >
+                    <v-row>
+                      <v-col
+                        cols="12"
                         v-for="(
                           cardComponent, index
                         ) in getComponentsToPrototypeFromState(state)"
                         :key="`card-component-to-prototype-from-state${index}`"
                       >
                         {{ cardComponent.gec.name }}
-                      </span>
-                      </span>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
               </v-tab-item>
               <v-tab-item>To Production</v-tab-item>
               <v-tab-item>To Polish</v-tab-item>
@@ -104,8 +133,8 @@ export default {
     },
 
     getComponentsToPrototypeFromState(state) {
-      return this.getComponentsToPrototypeFromArray(state.gameCardComponents)
-    }
+      return this.getComponentsToPrototypeFromArray(state.gameCardComponents);
+    },
   },
 
   computed: {

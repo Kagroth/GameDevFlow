@@ -11,7 +11,7 @@
       </v-card-title>
       <v-card-text>
           <v-row v-for="(card, index) in cards" :key="`card-${index}`">
-              <v-col cols="12">
+              <v-col cols="12" class="py-1">
                   <slot name="card" v-bind:card="card"></slot>
               </v-col>
           </v-row>

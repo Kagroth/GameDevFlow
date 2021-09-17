@@ -1,12 +1,14 @@
 <template>
   <div>
-    <v-card @click="showCard">
-      <v-card-title>
+    <v-card @click="showCard" class="" outlined flat tile>
+      <v-card-title class="text-subtitle-1">
         {{ card.title }}
       </v-card-title>
       <v-card-text class="text-left">
         <v-row>
           <v-col cols="8">
+            <v-icon color="primary" small class="pb-1">mdi-widgets</v-icon>
+            {{ countComponents() }}
             <span
               v-for="(componentsGroup, index) in groupComponentsByType(
                 card.gameCardComponents
@@ -61,6 +63,17 @@ export default {
   methods: {
     showCard() {
       this.showCardDetails = true
+    },
+
+    countComponents() {
+      const cardComponentsCount = this.card.gameCardComponents.length
+
+      const fsmCardComponentsCount = this.card.gameEntityFSM.states.reduce((acc, state) => {
+        acc += state.gameCardComponents.length
+        return acc
+      }, 0)
+
+      return cardComponentsCount + fsmCardComponentsCount
     },
 
     groupComponentsByType(componentsList) {
