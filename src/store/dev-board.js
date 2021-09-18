@@ -12,12 +12,33 @@ const getters = {
 
     cardsWithComponentsToPrototype: (state, getters, rootState, rootGetters) => {
         const TO_PROTOTYPE = rootGetters['cardComponents/CARD_STATES']['NOT_STARTED']
-        // To do: Check for components in FSM
-        return state.cards.filter(card => {
+
+        const cardComponents = state.cards.filter(card => {
             return card.gameCardComponents.some(component => {
                return component.cardState == TO_PROTOTYPE
             })
+        }) 
+
+        const fsmCardComponents = state.cards.filter(card => {
+            if (cardComponents.includes(card)) { 
+                return false 
+            }
+
+            if (card.gameEntityFSM.states.length === 0) {
+                return false
+            }
+
+            const gameCardComponentsByState = card.gameEntityFSM.states.map(state => state.gameCardComponents)
+
+            const gameCardComponentsByStateFlatten = gameCardComponentsByState.flat()
+            
+            return gameCardComponentsByStateFlatten.some(gameCardComponent => {
+                return gameCardComponent.cardState == TO_PROTOTYPE
+            }) 
         })
+
+        const finalArr = cardComponents.concat(fsmCardComponents)
+        return finalArr
     }
 }
 
