@@ -29,7 +29,7 @@
           </v-col>
           <v-col cols="12">
             <v-tabs-items v-model="selectedTab">
-              <v-tab-item>
+              <v-tab-item class="my-3">
                 <v-row
                   v-for="(card, index) in cardsWithToPrototypeComponents"
                   :key="`card-to-prototype-${index}`"
@@ -42,46 +42,19 @@
                       card.gameCardComponents
                     )"
                     :key="`card-component-to-prototype-${index}`"
+                    class="py-1"
                   >
-                    <v-card outlined flat tile>
-                      <v-card-title class="pa-0">
-                        <v-progress-linear value="0" :color="cardComponent.gec.color"></v-progress-linear>
-                      </v-card-title>
-                      <v-card-title class="text-subtitle-1 pb-1">
-                        <v-row>
-                          <v-col cols="2">
-                            <v-icon :color="cardComponent.gec.color">{{
-                              cardComponent.gec.icon
-                            }}</v-icon>
-                          </v-col>
-                          <v-col cols="10">
-                            <span v-if="cardComponent.title">
-                              {{ cardComponent.title }}
-                            </span>
-                            <span v-else>
-                              {{ cardComponent.gec.name }}
-                            </span>
-                          </v-col>
-                        </v-row>
-                      </v-card-title>
-                      <v-card-subtitle>
-                        <v-row>
-                          <v-spacer></v-spacer>
-                          <v-col cols="10">
-                            {{ card.title }}
-                          </v-col>
-                        </v-row>
-                      </v-card-subtitle>
-                      <v-card-text>
-                        Estimated time: {{ cardComponent.effort }}
-                      </v-card-text>
-                    </v-card>
+                    <game-component-card
+                      :cardTitle="card.title"
+                      :gameComponent="cardComponent"
+                    ></game-component-card>
                   </v-col>
 
                   <v-col
                     cols="12"
                     v-for="(state, index) in card.gameEntityFSM.states"
                     :key="`card-to-prototype-state${index}`"
+                    class="py-1"
                   >
                     <v-row>
                       <v-col
@@ -91,7 +64,10 @@
                         ) in getComponentsToPrototypeFromState(state)"
                         :key="`card-component-to-prototype-from-state${index}`"
                       >
-                        {{ cardComponent.gec.name }}
+                        <game-component-card
+                          :cardTitle="card.title"
+                          :gameComponent="cardComponent"
+                        ></game-component-card>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -107,8 +83,12 @@
   </div>
 </template>
 <script>
+import GameComponentCard from "@/components/GameComponentCard";
+
 export default {
-  components: {},
+  components: {
+    "game-component-card": GameComponentCard,
+  },
 
   props: {
     title: String,
