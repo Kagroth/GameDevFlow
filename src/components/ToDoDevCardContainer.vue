@@ -44,45 +44,16 @@
             <v-tabs-items v-model="selectedTab">
               <v-tab-item class="my-3">
                 <v-row
-                  v-for="(card, index) in cardsWithToPrototypeComponents"
-                  :key="`card-to-prototype-${index}`"
+                  v-for="(
+                    cardComponent, index
+                  ) in filteredCardComponents"
+                  :key="`card-component-to-prototype-${index}`"
                 >
-                  <v-col
-                    cols="12"
-                    v-for="(
-                      cardComponent, index
-                    ) in getComponentsToPrototypeFromArray(
-                      card.gameCardComponents
-                    )"
-                    :key="`card-component-to-prototype-${index}`"
-                    class="py-1"
-                  >
+                  <v-col cols="12" class="py-1">
                     <game-component-card
-                      :cardTitle="card.title"
-                      :gameComponent="cardComponent"
+                      :cardTitle="cardComponent.title"
+                      :gameComponent="cardComponent.gameCardComponent"
                     ></game-component-card>
-                  </v-col>
-
-                  <v-col
-                    cols="12"
-                    v-for="(state, index) in card.gameEntityFSM.states"
-                    :key="`card-to-prototype-state${index}`"
-                    class="py-1"
-                  >
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        v-for="(
-                          cardComponent, index
-                        ) in getComponentsToPrototypeFromState(state)"
-                        :key="`card-component-to-prototype-from-state${index}`"
-                      >
-                        <game-component-card
-                          :cardTitle="card.title"
-                          :gameComponent="cardComponent"
-                        ></game-component-card>
-                      </v-col>
-                    </v-row>
                   </v-col>
                 </v-row>
               </v-tab-item>
@@ -115,35 +86,32 @@ export default {
     };
   },
 
+  created() {
+    if (this.builtInGameComponents) {
+      this.filters = this.builtInGameComponents.map((bigc) => {
+        return {
+          builtInComponent: bigc,
+          active: false,
+        };
+      });
+    }
+  },
+
   methods: {
-    getComponentsToPrototypeFromArray(cardComponentsArray) {
-      const componentsNotStarted = cardComponentsArray.filter(
-        (cardComponent) => {
-          return cardComponent.cardState === "NOT_STARTED";
-        }
-      );
-
-      return componentsNotStarted;
-    },
-
-    getComponentsToPrototypeFromState(state) {
-      return this.getComponentsToPrototypeFromArray(state.gameCardComponents);
-    },
-
     onFilterButtonClick(index) {
       if (this.filters.length === 0) {
-        this.filters = this.builtInGameComponents.map(bigc => {
+        this.filters = this.builtInGameComponents.map((bigc) => {
           return {
             builtInComponent: bigc,
-            active: false
-          }
-        })
+            active: false,
+          };
+        });
       }
 
-      this.filters[index].active = !this.filters[index].active
+      this.filters[index].active = !this.filters[index].active;
 
-      this.$forceUpdate()
-    }
+      this.$forceUpdate();
+    },
   },
 
   computed: {
@@ -151,31 +119,49 @@ export default {
       return this.$store.getters["devBoard/cardsWithComponentsToPrototype"];
     },
 
+    cardComponentsWithCardTitleToPrototype() {
+      return this.$store.getters[
+        "devBoard/cardComponentsWithCardTitleAndState"
+      ]("NOT_STARTED");
+    },
+
     builtInGameComponents() {
       return this.$store.getters["cardComponents/components"];
     },
 
-    filteredCards() {
+    filteredCardComponents() {
       if (this.filters.length === 0) {
-        return this.cardsWithToPrototypeComponents
+        return this.cardComponentsWithCardTitleToPrototype;
       }
 
-      const isAnyFilterActive = this.filters.some(filter => {
-        return filter.active
-      })
+      const isAnyFilterActive = this.filters.some((filter) => {
+        return filter.active;
+      });
 
       if (!isAnyFilterActive) {
-        return this.cardsWithToPrototypeComponents
+        return this.cardComponentsWithCardTitleToPrototype;
       }
 
-      /* const activeFilters = this.filters.filter(filter => {
-        return filter.active
-      }).map(activeFilter => {
-        return activeFilter.builtInComponent.name
-      }) */
+      const activeFilters = this.filters
+        .filter((componentFilter) => {
+          return componentFilter.active;
+        })
+        .map((componentFilter) => {
+          return componentFilter.builtInComponent.name;
+        });
 
-      return []
-    }
+      return this.cardComponentsWithCardTitleToPrototype.filter(
+        (cardComponent) => {
+          if (
+            activeFilters.includes(cardComponent.gameCardComponent.gec.name)
+          ) {
+            return true;
+          }
+
+          return false;
+        }
+      );
+    },
   },
 };
 </script>

@@ -10,6 +10,64 @@ const getters = {
         return state.cards
     },
 
+    allCardComponents: (state) => {
+        const gameCardComponents = state.cards.map(card => {
+            return card.gameCardComponents
+        }).flat()
+
+        const gameFSMCardComponents = state.cards.map(card => {
+            return card.gameEntityFSM.states.map(state => {
+                return state.gameCardComponents
+            }).flat()
+        }).flat()
+
+        return gameCardComponents.concat(gameFSMCardComponents)
+    },
+
+    allCardComponentsWithCardTitle: (state) => {
+        const gameCardComponents = state.cards.map(card => {
+            return card.gameCardComponents.map(gcc => {
+                return {
+                    title: card.title,
+                    gameCardComponent: gcc
+                }
+            })
+        }).flat()
+
+        const gameFSMCardComponents = state.cards.map(card => {
+            return card.gameEntityFSM.states.map(state => {
+                return state.gameCardComponents.map(gcc => {
+                    return {
+                        title: card.title,
+                        gameCardComponent: gcc
+                    }
+                })
+            }).flat()
+        }).flat()
+
+        return gameCardComponents.concat(gameFSMCardComponents)
+    },
+
+    cardComponentsWithState: (state, getters) => (cardComponentState) => {
+        const allCardComponents = getters.allCardComponents
+
+        const allCardComponentsWithState = allCardComponents.filter(cc => {
+            return cc.cardState === cardComponentState
+        })
+        
+        return allCardComponentsWithState
+    },
+
+    cardComponentsWithCardTitleAndState: (state, getters) => (cardComponentState) => {
+        const cardComponentsWithCardTitle = getters.allCardComponentsWithCardTitle
+    
+        const cardComponentsWithTitleAndState = cardComponentsWithCardTitle.filter(cc => {
+            return cc.gameCardComponent.cardState === cardComponentState
+        })
+
+        return cardComponentsWithTitleAndState
+    },
+
     // Refactor to "Get Cards with state"
     cardsWithComponentsToPrototype: (state, getters, rootState, rootGetters) => {
         const TO_PROTOTYPE = rootGetters['cardComponents/CARD_STATES']['NOT_STARTED']
