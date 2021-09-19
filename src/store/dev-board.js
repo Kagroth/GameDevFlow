@@ -10,6 +10,7 @@ const getters = {
         return state.cards
     },
 
+    // Refactor to "Get Cards with state"
     cardsWithComponentsToPrototype: (state, getters, rootState, rootGetters) => {
         const TO_PROTOTYPE = rootGetters['cardComponents/CARD_STATES']['NOT_STARTED']
 

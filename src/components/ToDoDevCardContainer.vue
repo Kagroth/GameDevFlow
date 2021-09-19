@@ -3,12 +3,25 @@
     <v-card>
       <v-card-title>
         <v-row>
-          <v-col cols="6" class="text-left">To do</v-col>
-          <v-col cols="6" class="text-right">
-            <slot name="header-control"></slot>
-          </v-col>
+          <v-col cols="3" class="text-left">To do</v-col>
+          <v-col cols="9" class="px-0"> </v-col>
         </v-row>
       </v-card-title>
+      <v-card-subtitle class="mt-1 px-0">
+        <v-btn
+          class="mx-1 mt-2"
+          v-for="(builtInComponent, index) in builtInGameComponents"
+          :key="`built-in-components-${index}`"
+          :color="builtInComponent.color"
+          tile
+          small
+          :plain="!filters[index].active"
+          :outlined="!filters[index].active"
+          @click="onFilterButtonClick(index)"
+        >
+          <v-icon small>{{ builtInComponent.icon }}</v-icon>
+        </v-btn>
+      </v-card-subtitle>
       <v-card-text class="text-left">
         <v-row>
           <v-col cols="12" class="px-0">
@@ -98,6 +111,7 @@ export default {
   data() {
     return {
       selectedTab: 0,
+      filters: [],
     };
   },
 
@@ -115,12 +129,53 @@ export default {
     getComponentsToPrototypeFromState(state) {
       return this.getComponentsToPrototypeFromArray(state.gameCardComponents);
     },
+
+    onFilterButtonClick(index) {
+      if (this.filters.length === 0) {
+        this.filters = this.builtInGameComponents.map(bigc => {
+          return {
+            builtInComponent: bigc,
+            active: false
+          }
+        })
+      }
+
+      this.filters[index].active = !this.filters[index].active
+
+      this.$forceUpdate()
+    }
   },
 
   computed: {
     cardsWithToPrototypeComponents() {
       return this.$store.getters["devBoard/cardsWithComponentsToPrototype"];
     },
+
+    builtInGameComponents() {
+      return this.$store.getters["cardComponents/components"];
+    },
+
+    filteredCards() {
+      if (this.filters.length === 0) {
+        return this.cardsWithToPrototypeComponents
+      }
+
+      const isAnyFilterActive = this.filters.some(filter => {
+        return filter.active
+      })
+
+      if (!isAnyFilterActive) {
+        return this.cardsWithToPrototypeComponents
+      }
+
+      /* const activeFilters = this.filters.filter(filter => {
+        return filter.active
+      }).map(activeFilter => {
+        return activeFilter.builtInComponent.name
+      }) */
+
+      return []
+    }
   },
 };
 </script>
