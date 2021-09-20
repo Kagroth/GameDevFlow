@@ -42,6 +42,7 @@
           </v-col>
           <v-col cols="12">
             <v-tabs-items v-model="selectedTab">
+              <!-- To Prototype Tab -->
               <v-tab-item class="my-3">
                 <v-row
                   v-for="(
@@ -53,11 +54,31 @@
                     <game-component-card
                       :cardTitle="cardComponent.title"
                       :gameComponent="cardComponent.gameCardComponent"
+                      controls
                     ></game-component-card>
                   </v-col>
                 </v-row>
               </v-tab-item>
-              <v-tab-item>To Production</v-tab-item>
+
+              <!-- To Production Tab -->
+              <v-tab-item class="my-3">
+                <v-row
+                  v-for="(
+                    cardComponent, index
+                  ) in filteredCardComponentsToDo"
+                  :key="`card-component-to-do-${index}`"
+                >
+                  <v-col cols="12" class="py-1">
+                    <game-component-card
+                      :cardTitle="cardComponent.title"
+                      :gameComponent="cardComponent.gameCardComponent"
+                      controls
+                    ></game-component-card>
+                  </v-col>
+                </v-row>
+              </v-tab-item>
+
+              <!-- To Polish Tab -->
               <v-tab-item>To Polish</v-tab-item>
             </v-tabs-items>
           </v-col>
@@ -115,20 +136,29 @@ export default {
   },
 
   computed: {
-    cardsWithToPrototypeComponents() {
-      return this.$store.getters["devBoard/cardsWithComponentsToPrototype"];
-    },
-
     cardComponentsWithCardTitleToPrototype() {
-      return this.$store.getters[
+      const toPrototype = this.$store.getters[
         "devBoard/cardComponentsWithCardTitleAndState"
       ]("NOT_STARTED");
+
+      const prototype = this.$store.getters[
+        "devBoard/cardComponentsWithCardTitleAndState"
+      ]("PROTOTYPE");
+
+      return toPrototype.concat(prototype)
+    },
+
+    cardComponentsWithCardTitleToDo() {
+      return this.$store.getters[
+        "devBoard/cardComponentsWithCardTitleAndState"
+      ]("TO_DO");
     },
 
     builtInGameComponents() {
       return this.$store.getters["cardComponents/components"];
     },
 
+    // To Prototype cards filtered
     filteredCardComponents() {
       if (this.filters.length === 0) {
         return this.cardComponentsWithCardTitleToPrototype;
@@ -162,6 +192,41 @@ export default {
         }
       );
     },
+
+    // To Production cards filtered
+    filteredCardComponentsToDo() {
+      if (this.filters.length === 0) {
+        return this.cardComponentsWithCardTitleToDo;
+      }
+
+      const isAnyFilterActive = this.filters.some((filter) => {
+        return filter.active;
+      });
+
+      if (!isAnyFilterActive) {
+        return this.cardComponentsWithCardTitleToDo;
+      }
+
+      const activeFilters = this.filters
+        .filter((componentFilter) => {
+          return componentFilter.active;
+        })
+        .map((componentFilter) => {
+          return componentFilter.builtInComponent.name;
+        });
+
+      return this.cardComponentsWithCardTitleToDo.filter(
+        (cardComponent) => {
+          if (
+            activeFilters.includes(cardComponent.gameCardComponent.gec.name)
+          ) {
+            return true;
+          }
+
+          return false;
+        }
+      );
+    }
   },
 };
 </script>
