@@ -21,11 +21,43 @@
             {{ gameComponent.gec.name }}
           </span>
         </v-col>
-        <v-col cols="3" class="text-right pr-3 pt-2">
-          <v-btn x-small outlined tile color="primary">
+        <v-col cols="3" v-if="controls" class="text-right pr-3 pt-2">
+          <v-btn
+            v-if="gameComponent.cardState === CARD_STATES.NOT_STARTED || gameComponent.cardState === CARD_STATES.PROTOTYPE"
+            x-small
+            outlined
+            tile
+            color="primary"
+            @click="updateState(CARD_STATES.PROTOTYPING)"
+          >
             <v-icon left>mdi-play</v-icon>
             Start
           </v-btn>
+          <div v-else-if="gameComponent.cardState === CARD_STATES.PROTOTYPING">
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="yellow darken-2"
+              @click="updateState(CARD_STATES.PROTOTYPE)"
+            >
+              <v-icon left>mdi-pause</v-icon>
+              Pause
+            </v-btn>
+            <div class="py-1"></div>
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="red darken-2"
+              @click="updateState(CARD_STATES.TO_DO)"
+            >
+              <v-icon left>mdi-stop</v-icon>
+              End
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
     </v-card-title>
@@ -50,9 +82,32 @@
 </template>
 <script>
 export default {
-    props: {
-        cardTitle: String,
-        gameComponent: Object
-    }
+  props: {
+    cardTitle: String,
+    gameComponent: Object,
+    controls: {
+      type: Boolean,
+      default: false,
+    },
+    showState: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  methods: {
+    updateState(newState) {
+      this.$store.commit("devBoard/changeCardComponentState", {
+        cardComponent: this.gameComponent,
+        newState: newState,
+      });
+    },
+  },
+
+  computed: {
+    CARD_STATES() {
+      return this.$store.getters["cardComponents/CARD_STATES"];
+    },
+  },
 };
 </script>
