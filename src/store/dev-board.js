@@ -129,6 +129,13 @@ const mutations = {
     addCard(state, card) {
         state.cards.push(card)
     },
+
+    changeCardComponentState(state, payload) {
+        const cardComponent = payload.cardComponent 
+        const newState = payload.newState
+        
+        cardComponent.cardState = newState
+    }
 }
 
 const actions = {

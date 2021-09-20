@@ -38,8 +38,6 @@ const mutations = {
     
         const cardStates = {
             NOT_STARTED: "NOT_STARTED",
-
-            TO_PROTOTYPE: "TO_PROTOTYPE",
             PROTOTYPING: "PROTOTYPING",
             PROTOTYPE: "PROTOTYPE",
 
