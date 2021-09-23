@@ -43,7 +43,7 @@
             <in-progress-container></in-progress-container>
           </v-col>
           <v-col cols="3" class="px-1">
-            <dev-card-container title="Done"></dev-card-container>
+            <done-container></done-container>
           </v-col>
         </v-row>
       </v-col>
@@ -61,6 +61,7 @@
 import DevCardContainer from "@/components/DevCardContainer";
 import ToDoDevCardContainer from "@/components/ToDoDevCardContainer";
 import InProgressContainer from "@/components/InProgressContainer";
+import DoneContainer from "@/components/DoneContainer";
 import DevCard from "@/components/DevCard";
 import CardCreator from "@/components/CardCreator"
 
@@ -69,6 +70,7 @@ export default {
     "dev-card-container": DevCardContainer,
     "to-do-dev-card-container": ToDoDevCardContainer,
     "in-progress-container": InProgressContainer,
+    "done-container": DoneContainer,
     "dev-card": DevCard,
     "card-creator": CardCreator,
   },
