@@ -54,37 +54,7 @@
                 <v-icon small color="primary">mdi-timer-sand</v-icon>
               </v-col>
               <v-col cols="5" class="d-flex align-center">
-                <v-row>
-                  <v-col>
-                    <v-progress-linear
-                      :value="
-                        gameCardComponent.cardState === CARD_STATES.PROTOTYPE ||
-                        gameCardComponent.cardState === CARD_STATES.TO_DO
-                          ? 100
-                          : 0
-                      "
-                    ></v-progress-linear>
-                  </v-col>
-                  <v-col
-                    ><v-progress-linear
-                      :value="
-                        gameCardComponent.cardState === CARD_STATES.DONE ||
-                        gameCardComponent.cardState === CARD_STATES.TO_POLISH
-                          ? 100
-                          : 0
-                      "
-                    ></v-progress-linear
-                  ></v-col>
-                  <v-col
-                    ><v-progress-linear
-                      :value="
-                        gameCardComponent.cardState === CARD_STATES.POLISHED
-                          ? 100
-                          : 0
-                      "
-                    ></v-progress-linear
-                  ></v-col>
-                </v-row>
+                <card-component-state-indicator :cardComponentState="gameCardComponent.cardState"></card-component-state-indicator>
               </v-col>
             </v-row>
             <v-row>
@@ -137,42 +107,7 @@
                         <v-icon small color="primary">mdi-timer-sand</v-icon>
                       </v-col>
                       <v-col cols="7" class="d-flex align-center">
-                        <v-row>
-                          <v-col>
-                            <v-progress-linear
-                              :value="
-                                gameCardComponent.cardState ===
-                                  CARD_STATES.PROTOTYPE ||
-                                gameCardComponent.cardState ===
-                                  CARD_STATES.TO_DO
-                                  ? 100
-                                  : 0
-                              "
-                            ></v-progress-linear>
-                          </v-col>
-                          <v-col
-                            ><v-progress-linear
-                              :value="
-                                gameCardComponent.cardState ===
-                                  CARD_STATES.DONE ||
-                                gameCardComponent.cardState ===
-                                  CARD_STATES.TO_POLISH
-                                  ? 100
-                                  : 0
-                              "
-                            ></v-progress-linear
-                          ></v-col>
-                          <v-col
-                            ><v-progress-linear
-                              :value="
-                                gameCardComponent.cardState ===
-                                CARD_STATES.POLISHED
-                                  ? 100
-                                  : 0
-                              "
-                            ></v-progress-linear
-                          ></v-col>
-                        </v-row>
+                        <card-component-state-indicator :cardComponentState="gameCardComponent.cardState"></card-component-state-indicator>
                       </v-col>
                     </v-row>
                   </v-tab-item>
@@ -186,22 +121,22 @@
   </div>
 </template>
 <script>
+import CardComponentStateIndicator from '@/components/CardComponentStateIndicator'
+
 export default {
   props: {
     card: Object,
     totalEffort: Number,
   },
 
+  components: {
+    "card-component-state-indicator": CardComponentStateIndicator
+  },
+
   data() {
     return {
       currentStateTab: 0,
     };
-  },
-
-  computed: {
-    CARD_STATES() {
-      return this.$store.getters["cardComponents/CARD_STATES"];
-    },
   },
 };
 </script>
