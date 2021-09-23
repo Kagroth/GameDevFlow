@@ -10,7 +10,9 @@
       <v-col cols="3" align="left">
         <p class="text-h4">{{ project.name }}</p>
       </v-col>
-      <v-spacer></v-spacer>
+      <v-col class="text-right">
+        <time-tracker></time-tracker>
+      </v-col>
     </v-row>
     <v-toolbar>
       <v-toolbar-items>
@@ -34,9 +36,15 @@
   </div>
 </template>
 <script>
+import TimeTracker from "@/components/TimeTracker"
+
 export default {
   props: {
     project: Object,
+  },
+
+  components: {
+    "time-tracker": TimeTracker
   },
 
   methods: {
