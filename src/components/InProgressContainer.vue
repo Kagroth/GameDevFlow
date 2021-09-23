@@ -14,6 +14,7 @@
               :gameComponent="cardComponent.gameCardComponent"
               :cardTitle="cardComponent.title"
               controls
+              showState
             ></game-component-card>
           </v-col>
         </v-row>

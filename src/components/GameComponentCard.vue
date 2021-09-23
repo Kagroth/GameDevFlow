@@ -6,6 +6,36 @@
         :color="gameComponent.gec.color"
       ></v-progress-linear>
     </v-card-title>
+    <v-card-title v-if="showState" class="text-subtitle-2">
+      <v-row>
+        <v-col cols="2">
+          <v-icon
+            v-if="gameComponent.cardState === CARD_STATES.PROTOTYPING"
+            color="primary"
+            >mdi-pencil-ruler</v-icon
+          >
+          <v-icon
+            v-else-if="gameComponent.cardState === CARD_STATES.PRODUCTION"
+            color="primary"
+            >mdi-tools</v-icon
+          >
+          <v-icon
+            v-else-if="gameComponent.cardState === CARD_STATES.POLISHING"
+            color="primary"
+            >mdi-diamond-stone</v-icon
+          >
+        </v-col>
+        <v-col cols="10">
+          {{ gameComponent.cardState }}
+        </v-col>
+      </v-row>
+    </v-card-title>
+    
+      <v-row>
+        <v-col cols="12">
+          <v-divider></v-divider>
+        </v-col>
+      </v-row>
     <v-card-title class="text-subtitle-1 pb-1">
       <v-row>
         <v-col cols="2">
@@ -23,7 +53,10 @@
         </v-col>
         <v-col cols="3" v-if="controls" class="text-right pr-3 pt-2">
           <v-btn
-            v-if="gameComponent.cardState === CARD_STATES.NOT_STARTED || gameComponent.cardState === CARD_STATES.PROTOTYPE"
+            v-if="
+              gameComponent.cardState === CARD_STATES.NOT_STARTED ||
+              gameComponent.cardState === CARD_STATES.PROTOTYPE
+            "
             x-small
             outlined
             tile
