@@ -10,7 +10,11 @@
           :key="`game-component-card-in-progress-${index}`"
         >
           <v-col cols="12" class="text-left py-1">
-            <game-component-card :gameComponent="cardComponent.gameCardComponent" :cardTitle="cardComponent.title" controls></game-component-card>
+            <game-component-card
+              :gameComponent="cardComponent.gameCardComponent"
+              :cardTitle="cardComponent.title"
+              controls
+            ></game-component-card>
           </v-col>
         </v-row>
       </v-card-text>
@@ -18,7 +22,7 @@
   </div>
 </template>
 <script>
-import GameComponentCard from '@/components/GameComponentCard'
+import GameComponentCard from "@/components/GameComponentCard";
 
 export default {
   components: {
@@ -27,15 +31,22 @@ export default {
 
   computed: {
     cardComponentsWithCardTitlePrototyping() {
-      const prototypingCards = this.$store.getters[
-        "devBoard/cardComponentsWithCardTitleAndState"
-      ]("PROTOTYPING");
+      const prototypingCards =
+        this.$store.getters["devBoard/cardComponentsWithCardTitleAndState"](
+          "PROTOTYPING"
+        );
 
-      const productionCards = this.$store.getters[
-        "devBoard/cardComponentsWithCardTitleAndState"
-      ]("PRODUCTION");
+      const productionCards =
+        this.$store.getters["devBoard/cardComponentsWithCardTitleAndState"](
+          "PRODUCTION"
+        );
 
-      return prototypingCards.concat(productionCards)
+      const polishingCards =
+        this.$store.getters["devBoard/cardComponentsWithCardTitleAndState"](
+          "POLISHING"
+        );
+
+      return prototypingCards.concat(productionCards).concat(polishingCards);
     },
   },
 };

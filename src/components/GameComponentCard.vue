@@ -116,10 +116,36 @@
               block
               tile
               color="yellow darken-3"
-              @click="updateState(CARD_STATES.TO_POLISH)"
+              @click="updateState(CARD_STATES.POLISHED)"
             >
               <v-icon left>mdi-stop</v-icon>
               Finish
+            </v-btn>
+          </div>
+
+          <div v-else-if="gameComponent.cardState === CARD_STATES.POLISHING">
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="yellow darken-3"
+              @click="updateState(CARD_STATES.TO_POLISH)"
+            >
+              <v-icon left>mdi-pause</v-icon>
+              Pause
+            </v-btn>
+            <div class="py-1"></div>
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="red darken-2"
+              @click="updateState(CARD_STATES.POLISHED)"
+            >
+              <v-icon left>mdi-stop</v-icon>
+              End
             </v-btn>
           </div>
         </v-col>
