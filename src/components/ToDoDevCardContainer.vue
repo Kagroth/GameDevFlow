@@ -45,9 +45,7 @@
               <!-- To Prototype Tab -->
               <v-tab-item class="my-3">
                 <v-row
-                  v-for="(
-                    cardComponent, index
-                  ) in filteredCardComponents"
+                  v-for="(cardComponent, index) in filteredCardComponents"
                   :key="`card-component-to-prototype-${index}`"
                 >
                   <v-col cols="12" class="py-1">
@@ -63,9 +61,7 @@
               <!-- To Production Tab -->
               <v-tab-item class="my-3">
                 <v-row
-                  v-for="(
-                    cardComponent, index
-                  ) in filteredCardComponentsToDo"
+                  v-for="(cardComponent, index) in filteredCardComponentsToDo"
                   :key="`card-component-to-do-${index}`"
                 >
                   <v-col cols="12" class="py-1">
@@ -79,7 +75,22 @@
               </v-tab-item>
 
               <!-- To Polish Tab -->
-              <v-tab-item>To Polish</v-tab-item>
+              <v-tab-item class="my-3">
+                <v-row
+                  v-for="(
+                    cardComponent, index
+                  ) in filteredCardComponentsToPolish"
+                  :key="`card-component-to-do-${index}`"
+                >
+                  <v-col cols="12" class="py-1">
+                    <game-component-card
+                      :cardTitle="cardComponent.title"
+                      :gameComponent="cardComponent.gameCardComponent"
+                      controls
+                    ></game-component-card>
+                  </v-col>
+                </v-row>
+              </v-tab-item>
             </v-tabs-items>
           </v-col>
         </v-row>
@@ -133,19 +144,55 @@ export default {
 
       this.$forceUpdate();
     },
+
+    applyFilters(cardComponentsArray) {
+      if (this.filters.length === 0) {
+        return cardComponentsArray;
+      }
+
+      const isAnyFilterActive = this.filters.some((filter) => {
+        return filter.active;
+      });
+
+      if (!isAnyFilterActive) {
+        return cardComponentsArray;
+      }
+
+      const activeFilters = this.filters
+        .filter((componentFilter) => {
+          return componentFilter.active;
+        })
+        .map((componentFilter) => {
+          return componentFilter.builtInComponent.name;
+        });
+
+      return cardComponentsArray.filter(
+        (cardComponent) => {
+          if (
+            activeFilters.includes(cardComponent.gameCardComponent.gec.name)
+          ) {
+            return true;
+          }
+
+          return false;
+        }
+      );
+    },
   },
 
   computed: {
     cardComponentsWithCardTitleToPrototype() {
-      const toPrototype = this.$store.getters[
-        "devBoard/cardComponentsWithCardTitleAndState"
-      ]("NOT_STARTED");
+      const toPrototype =
+        this.$store.getters["devBoard/cardComponentsWithCardTitleAndState"](
+          "NOT_STARTED"
+        );
 
-      const prototype = this.$store.getters[
-        "devBoard/cardComponentsWithCardTitleAndState"
-      ]("PROTOTYPE");
+      const prototype =
+        this.$store.getters["devBoard/cardComponentsWithCardTitleAndState"](
+          "PROTOTYPE"
+        );
 
-      return toPrototype.concat(prototype)
+      return toPrototype.concat(prototype);
     },
 
     cardComponentsWithCardTitleToDo() {
@@ -154,79 +201,30 @@ export default {
       ]("TO_DO");
     },
 
+    cardComponentsWithCardTitleToPolish() {
+      return this.$store.getters[
+        "devBoard/cardComponentsWithCardTitleAndState"
+      ]("TO_POLISH");
+    },
+
     builtInGameComponents() {
       return this.$store.getters["cardComponents/components"];
     },
 
     // To Prototype cards filtered
     filteredCardComponents() {
-      if (this.filters.length === 0) {
-        return this.cardComponentsWithCardTitleToPrototype;
-      }
-
-      const isAnyFilterActive = this.filters.some((filter) => {
-        return filter.active;
-      });
-
-      if (!isAnyFilterActive) {
-        return this.cardComponentsWithCardTitleToPrototype;
-      }
-
-      const activeFilters = this.filters
-        .filter((componentFilter) => {
-          return componentFilter.active;
-        })
-        .map((componentFilter) => {
-          return componentFilter.builtInComponent.name;
-        });
-
-      return this.cardComponentsWithCardTitleToPrototype.filter(
-        (cardComponent) => {
-          if (
-            activeFilters.includes(cardComponent.gameCardComponent.gec.name)
-          ) {
-            return true;
-          }
-
-          return false;
-        }
-      );
+      return this.applyFilters(this.cardComponentsWithCardTitleToPrototype)
     },
 
     // To Production cards filtered
     filteredCardComponentsToDo() {
-      if (this.filters.length === 0) {
-        return this.cardComponentsWithCardTitleToDo;
-      }
+      return this.applyFilters(this.cardComponentsWithCardTitleToDo)
+    },
 
-      const isAnyFilterActive = this.filters.some((filter) => {
-        return filter.active;
-      });
-
-      if (!isAnyFilterActive) {
-        return this.cardComponentsWithCardTitleToDo;
-      }
-
-      const activeFilters = this.filters
-        .filter((componentFilter) => {
-          return componentFilter.active;
-        })
-        .map((componentFilter) => {
-          return componentFilter.builtInComponent.name;
-        });
-
-      return this.cardComponentsWithCardTitleToDo.filter(
-        (cardComponent) => {
-          if (
-            activeFilters.includes(cardComponent.gameCardComponent.gec.name)
-          ) {
-            return true;
-          }
-
-          return false;
-        }
-      );
-    }
+    // To Production cards filtered
+    filteredCardComponentsToPolish() {
+      return this.applyFilters(this.cardComponentsWithCardTitleToPolish)
+    },
   },
 };
 </script>
