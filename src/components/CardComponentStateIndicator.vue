@@ -7,7 +7,8 @@
           cardComponentState === CARD_STATES.TO_DO || 
           cardComponentState === CARD_STATES.DONE ||
           cardComponentState === CARD_STATES.PRODUCTION ||
-          cardComponentState === CARD_STATES.TO_POLISH
+          cardComponentState === CARD_STATES.TO_POLISH ||
+          cardComponentState === CARD_STATES.POLISHED
             ? 100
             : 0
         "
