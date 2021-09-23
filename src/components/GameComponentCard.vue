@@ -39,7 +39,7 @@
               outlined
               block
               tile
-              color="yellow darken-2"
+              color="yellow darken-3"
               @click="updateState(CARD_STATES.PROTOTYPE)"
             >
               <v-icon left>mdi-pause</v-icon>
@@ -56,6 +56,70 @@
             >
               <v-icon left>mdi-stop</v-icon>
               End
+            </v-btn>
+          </div>
+
+          <v-btn
+            v-if="gameComponent.cardState === CARD_STATES.TO_DO"
+            x-small
+            outlined
+            tile
+            color="primary"
+            @click="updateState(CARD_STATES.PRODUCTION)"
+          >
+            <v-icon left>mdi-play</v-icon>
+            Start
+          </v-btn>
+
+          <div v-else-if="gameComponent.cardState === CARD_STATES.PRODUCTION">
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="yellow darken-3"
+              @click="updateState(CARD_STATES.TO_DO)"
+            >
+              <v-icon left>mdi-pause</v-icon>
+              Pause
+            </v-btn>
+            <div class="py-1"></div>
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="red darken-2"
+              @click="updateState(CARD_STATES.TO_POLISH)"
+            >
+              <v-icon left>mdi-stop</v-icon>
+              End
+            </v-btn>
+          </div>
+
+          <div v-else-if="gameComponent.cardState === CARD_STATES.TO_POLISH">
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="primary"
+              @click="updateState(CARD_STATES.POLISHING)"
+            >
+              <v-icon left>mdi-play</v-icon>
+              Start
+            </v-btn>
+            <div class="py-1"></div>
+            <v-btn
+              x-small
+              outlined
+              block
+              tile
+              color="yellow darken-3"
+              @click="updateState(CARD_STATES.TO_POLISH)"
+            >
+              <v-icon left>mdi-stop</v-icon>
+              Finish
             </v-btn>
           </div>
         </v-col>

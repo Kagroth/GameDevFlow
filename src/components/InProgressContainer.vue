@@ -27,9 +27,15 @@ export default {
 
   computed: {
     cardComponentsWithCardTitlePrototyping() {
-      return this.$store.getters[
+      const prototypingCards = this.$store.getters[
         "devBoard/cardComponentsWithCardTitleAndState"
       ]("PROTOTYPING");
+
+      const productionCards = this.$store.getters[
+        "devBoard/cardComponentsWithCardTitleAndState"
+      ]("PRODUCTION");
+
+      return prototypingCards.concat(productionCards)
     },
   },
 };
