@@ -13,6 +13,7 @@ export class GameCardComponent {
         this.effort = effort
         this.cardState = cardState
         this.description = description
+        this.workedTime = 0
     }
 }
 
