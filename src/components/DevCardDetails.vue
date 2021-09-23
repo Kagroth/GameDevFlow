@@ -8,10 +8,10 @@
       </v-card-text>
       <v-card-text>
         <v-row>
-          <v-col cols="8">
+          <v-col offset="1" cols="10">
             <v-row>
-              <v-col cols="6">Component</v-col>
-              <v-col cols="6">
+              <v-col cols="7">Component</v-col>
+              <v-col cols="5">
                 <v-row>
                   <v-col cols="12">Progress</v-col>
                   <v-col cols="12">
@@ -41,7 +41,7 @@
                   gameCardComponent.gec.icon
                 }}</v-icon>
               </v-col>
-              <v-col cols="4" class="text-left"
+              <v-col cols="3" class="text-left"
                 ><span v-if="gameCardComponent.title !== ''">
                   {{ gameCardComponent.title }}
                 </span>
@@ -49,7 +49,11 @@
                   {{ gameCardComponent.gec.name }}
                 </span>
               </v-col>
-              <v-col cols="6" class="d-flex align-center">
+              <v-col cols="2 d-flex align-center justify-end">
+                {{ gameCardComponent.effort }}
+                <v-icon small color="primary">mdi-timer-sand</v-icon>
+              </v-col>
+              <v-col cols="5" class="d-flex align-center">
                 <v-row>
                   <v-col>
                     <v-progress-linear
@@ -95,7 +99,9 @@
                     v-for="(state, index) in card.gameEntityFSM.states"
                     :key="`game-entity-state-${index}`"
                   >
-                  <v-icon left small color="primary">mdi-state-machine</v-icon>
+                    <v-icon left small color="primary"
+                      >mdi-state-machine</v-icon
+                    >
                     {{ state.name }}
                   </v-tab>
                 </v-tabs>
@@ -118,7 +124,7 @@
                           gameCardComponent.gec.icon
                         }}</v-icon>
                       </v-col>
-                      <v-col cols="3" class="text-left">
+                      <v-col cols="2" class="text-left">
                         <span v-if="gameCardComponent.title !== ''">
                           {{ gameCardComponent.title }}
                         </span>
@@ -126,7 +132,11 @@
                           {{ gameCardComponent.gec.name }}
                         </span>
                       </v-col>
-                      <v-col cols="8" class="d-flex align-center">
+                      <v-col cols="2 d-flex align-center justify-end">
+                        {{ gameCardComponent.effort }}
+                        <v-icon small color="primary">mdi-timer-sand</v-icon>
+                      </v-col>
+                      <v-col cols="7" class="d-flex align-center">
                         <v-row>
                           <v-col>
                             <v-progress-linear
