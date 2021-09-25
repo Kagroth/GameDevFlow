@@ -29,8 +29,16 @@ const mutations = {
         state.isTracking = true
     },
 
+    pauseTimeTracking(state) {
+        state.isTracking = false
+    },
+
     stopTimeTracking(state) {
         state.isTracking = false
+
+        const endTime = new Date()
+        const workingTime = endTime - state.timeTrackingStartTime
+        state.contextCardComponent.workingTime += workingTime
     }
 }
 

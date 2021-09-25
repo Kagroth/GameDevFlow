@@ -220,11 +220,20 @@ export default {
 
   methods: {
     updateState(newState) {
-      this.$store.commit("devBoard/changeCardComponentState", {
+      const payload = {
         cardComponent: this.gameComponent,
         newState: newState,
-      });
-    },
+      }
+
+      this.$store.commit("devBoard/changeCardComponentState", payload);
+      this.$store.commit("timeTracker/startTimeTracking", payload);
+      
+      if (newState === this.CARD_STATES.PROTOTYPING ||
+          newState === this.CARD_STATES.PRODUCTION ||
+          newState === this.CARD_STATES.POLISHING) {
+          this.$store.commit("timeTracker/startTimeTracking", payload);
+      }
+   },
   },
 
   computed: {

@@ -10,7 +10,7 @@ export default {
     methods: {
         toggleTracking() {
             if (!this.isTracking) this.$store.commit("timeTracker/startTimeTracking")
-            else this.$store.commit("timeTracker/stopTimeTracking")
+            else this.$store.commit("timeTracker/pauseTimeTracking")
         }
     },
 
