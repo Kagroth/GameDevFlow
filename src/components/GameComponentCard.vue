@@ -226,12 +226,19 @@ export default {
       }
 
       this.$store.commit("devBoard/changeCardComponentState", payload);
-      this.$store.commit("timeTracker/startTimeTracking", payload);
       
       if (newState === this.CARD_STATES.PROTOTYPING ||
           newState === this.CARD_STATES.PRODUCTION ||
           newState === this.CARD_STATES.POLISHING) {
           this.$store.commit("timeTracker/startTimeTracking", payload);
+          return
+      }
+
+      if (newState === this.CARD_STATES.PROTOTYPE ||
+          newState === this.CARD_STATES.TO_DO ||
+          newState === this.CARD_STATES.TO_POLISH) {
+          this.$store.commit("timeTracker/stopTimeTracking");
+          return
       }
    },
   },

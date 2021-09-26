@@ -13,6 +13,10 @@ const getters = {
     trackedCardComponent: state => {
         return state.contextCardComponent
     },
+
+    timeTrackingStartTime: state => {
+        return state.timeTrackingStartTime
+    }
 }
 
 const mutations = {
@@ -25,7 +29,7 @@ const mutations = {
             state.contextCardComponent = payload.cardComponent
         }
 
-        state.timeTrackingStartTime = new Date()
+        state.timeTrackingStartTime = performance.now()
         state.isTracking = true
     },
 
@@ -36,7 +40,7 @@ const mutations = {
     stopTimeTracking(state) {
         state.isTracking = false
 
-        const endTime = new Date()
+        const endTime = performance.now()
         const workingTime = endTime - state.timeTrackingStartTime
         state.contextCardComponent.workingTime += workingTime
     }
