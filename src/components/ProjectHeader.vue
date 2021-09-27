@@ -10,10 +10,11 @@
       <v-col cols="3" align="left">
         <p class="text-h4">{{ project.name }}</p>
       </v-col>
-      <v-col class="text-right">
+      <v-col class="text-right d-flex align-stretch">
         <time-tracker></time-tracker>
       </v-col>
     </v-row>
+    <div class="my-4"></div>
     <v-toolbar>
       <v-toolbar-items>
         <v-btn class="pa-6" @click="goToBoard('DesignBoard')" tile>

@@ -1,11 +1,18 @@
 const state = {
-    // current card component for time tracking 
+    // current card component for time tracking
+    isTrackerActive: false,
     isTracking: false,
     contextCardComponent: {},
-    timeTrackingStartTime: {}
+    timeTrackingStartTime: {},
+    contextElapsedTime: 0,
+    previousTime: null
 }
 
 const getters = {
+    isTrackerActive: state => {
+        return state.isTrackerActive
+    },
+
     isTracking: state => {
         return state.isTracking
     },
@@ -16,6 +23,10 @@ const getters = {
 
     timeTrackingStartTime: state => {
         return state.timeTrackingStartTime
+    },
+
+    elapsedTime: state => {
+        return state.contextElapsedTime
     }
 }
 
@@ -31,19 +42,38 @@ const mutations = {
 
         state.timeTrackingStartTime = performance.now()
         state.isTracking = true
+        state.isTrackerActive = true
+        state.previousTime = null
     },
 
     pauseTimeTracking(state) {
         state.isTracking = false
+        state.previousTime = null
     },
 
     stopTimeTracking(state) {
+        state.isTrackerActive = false
         state.isTracking = false
+        state.previousTime = null
+        state.contextElapsedTime = 0
+        state.contextCardComponent = {}
+    },
 
-        const endTime = performance.now()
-        const workingTime = endTime - state.timeTrackingStartTime
-        state.contextCardComponent.workingTime += workingTime
-    }
+    updateTimeTracker(state) {
+        const prevTime = performance.now()
+        let elapsedTime = null
+  
+        if (state.previousTime) {
+            elapsedTime = prevTime - state.previousTime
+        }
+        else {
+            elapsedTime = prevTime - state.timeTrackingStartTime;
+        }
+  
+        state.previousTime = prevTime
+        state.contextElapsedTime += elapsedTime
+        state.contextCardComponent.workedTime += elapsedTime
+    },
 }
 
 const actions = {
