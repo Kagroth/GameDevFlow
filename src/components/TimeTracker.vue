@@ -19,9 +19,15 @@
           </v-col>
           <v-col cols="3" class="d-flex align-center">
             <v-row>
-              <v-col cols="12" class="text-left">Estimation</v-col>
+              <v-col cols="12" class="text-left">
+                Estimation: 
+                {{ trackedCardComponent.effort }}h
+              </v-col>
               <v-col cols="12">
-                <v-progress-linear :value="workProgress(trackedCardComponent)"></v-progress-linear>
+                <v-progress-linear 
+                  :value="workProgress(trackedCardComponent)" 
+                  :color="workProgress(trackedCardComponent) > trackedCardComponent.effort ? 'red darken-3' : 'primary'">
+                </v-progress-linear>
               </v-col>
             </v-row>
           </v-col>
@@ -80,8 +86,12 @@ export default {
 
   methods: {
     toggleTracking() {
-      if (!this.isTracking) this.$store.commit("timeTracker/startTimeTracking");
-      else this.$store.commit("timeTracker/pauseTimeTracking");
+      if (!this.isTracking) {
+        this.resumeTimeTracking();
+      }
+      else {
+        this.pauseTimeTracking();
+      }
     },
 
     timeTrack() {
