@@ -194,10 +194,21 @@
     </v-card-subtitle>
     <v-card-text>
       <v-row>
-        <v-col cols="2"></v-col>
-        <v-col>
+        <v-col offset="2" cols="6">
           Estimated time: {{ gameComponent.effort }}
           <v-icon small color="primary">mdi-timer-sand</v-icon>
+        </v-col>
+        <v-col class="d-flex align-center">
+          <v-progress-linear 
+            height="100%"
+            :value="workProgress(gameComponent)" 
+            :color="workProgress(gameComponent) > gameComponent.effort ? 'red darken-3' : 'primary'">
+            <template v-slot:default>
+              <div>
+                {{ convertFromMiliseconds(gameComponent.workedTime) }}
+              </div>
+            </template>
+          </v-progress-linear>
         </v-col>
       </v-row>
     </v-card-text>
@@ -241,6 +252,26 @@ export default {
           return
       }
    },
+
+   convertFromMiliseconds(ms) {
+      let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+      let minutes = Math.floor((ms / (1000 * 60)) % 60);
+      let seconds = Math.floor((ms / 1000) % 60);
+
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      return `${hours}:${minutes}:${seconds}`;
+    },
+
+   workProgress(cardComponent) {
+      const workedTimeInMiliseconds = cardComponent.workedTime
+      const estimatedEffortInHours = cardComponent.effort
+      const estimatedEffortInMiliseconds = estimatedEffortInHours * 60 * 60 * 1000
+
+      return workedTimeInMiliseconds / estimatedEffortInMiliseconds * 100
+    }
   },
 
   computed: {
