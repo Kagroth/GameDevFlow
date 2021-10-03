@@ -57,8 +57,9 @@
             <v-text-field label="Project name" v-model="projectName"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="error" @click="projectCreatorModal = false">Cancel</v-btn>
-            <v-btn color="primary" @click="createProject">Create</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn tile color="red darken-2" @click="projectCreatorModal = false">Cancel</v-btn>
+            <v-btn tile color="primary" @click="createProject">Create</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
