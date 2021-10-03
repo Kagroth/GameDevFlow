@@ -51,6 +51,7 @@
                     v-for="(ec, index) in newCard.entityComponents"
                     :key="`ec-${index}`"
                     :cardComponent="ec"
+                    :componentIndex="index"
                     @remove-entity-component="removeEntityComponent"
                   >
                   </card-component-expansion-panel>
@@ -116,6 +117,7 @@
                         .gameCardComponents"
                       :key="`ec-${index}`"
                       :cardComponent="ec"
+                      :componentIndex="index"
                       @remove-entity-component="removeEntityComponent"
                     >
                     </card-component-expansion-panel>

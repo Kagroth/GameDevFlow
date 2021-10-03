@@ -34,7 +34,7 @@
             tile
             color="red darken-3"
             small
-            @click="removeEntityComponent(index)"
+            @click="removeEntityComponent"
             >Remove</v-btn
           >
         </v-col>
@@ -46,12 +46,13 @@
 <script>
 export default {
     props: {
-        cardComponent: Object
+        cardComponent: Object,
+        componentIndex: Number
     },
 
     methods: {
-        removeEntityComponent(index) {
-            this.$emit('remove-entity-component', index)
+        removeEntityComponent() {
+            this.$emit('remove-entity-component', this.componentIndex)
         },
 
         parseEffort(value) {
