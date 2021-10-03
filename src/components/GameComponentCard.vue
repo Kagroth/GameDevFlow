@@ -184,7 +184,7 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-subtitle>
+    <v-card-subtitle class="pb-1">
       <v-row>
         <v-spacer></v-spacer>
         <v-col cols="10">
@@ -192,6 +192,16 @@
         </v-col>
       </v-row>
     </v-card-subtitle>
+    <v-card-subtitle v-if="stateName" class="pt-0">
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col cols="10">
+          {{ stateName }}
+          <v-icon x-small color="primary">mdi-state-machine</v-icon>
+        </v-col>
+      </v-row>
+    </v-card-subtitle>
+    <v-card-subtitle v-else></v-card-subtitle>
     <v-card-text>
       <v-row>
         <v-col offset="2" cols="6">
@@ -218,6 +228,7 @@
 export default {
   props: {
     cardTitle: String,
+    stateName: String,
     gameComponent: Object,
     controls: {
       type: Boolean,

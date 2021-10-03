@@ -39,6 +39,7 @@ const getters = {
                 return state.gameCardComponents.map(gcc => {
                     return {
                         title: card.title,
+                        stateName: state.name,
                         gameCardComponent: gcc
                     }
                 })
