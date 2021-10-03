@@ -51,6 +51,7 @@
                   <v-col cols="12" class="py-1">
                     <game-component-card
                       :cardTitle="cardComponent.title"
+                      :stateName="cardComponent.stateName"
                       :gameComponent="cardComponent.gameCardComponent"
                       controls
                     ></game-component-card>
@@ -67,6 +68,7 @@
                   <v-col cols="12" class="py-1">
                     <game-component-card
                       :cardTitle="cardComponent.title"
+                      :stateName="cardComponent.stateName"
                       :gameComponent="cardComponent.gameCardComponent"
                       controls
                     ></game-component-card>
@@ -85,6 +87,7 @@
                   <v-col cols="12" class="py-1">
                     <game-component-card
                       :cardTitle="cardComponent.title"
+                      :stateName="cardComponent.stateName"
                       :gameComponent="cardComponent.gameCardComponent"
                       controls
                     ></game-component-card>
