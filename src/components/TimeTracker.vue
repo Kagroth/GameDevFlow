@@ -4,7 +4,7 @@
       <v-icon color="primary" left>mdi-timer</v-icon>
       Tracker
     </v-col>
-    <v-col cols="7">
+    <v-col cols="7" class="d-flex align-center">
       <div
         v-if="
           trackedCardComponent && Object.keys(trackedCardComponent).length !== 0
@@ -47,7 +47,9 @@
           </v-col>
         </v-row>
       </div>
-      <div v-else>No tracking</div>
+      <div v-else>
+        No tracking
+      </div>
     </v-col>
     <v-col offset="2" cols="1" class="text-right pa-0">
       <v-btn
