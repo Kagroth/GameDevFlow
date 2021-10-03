@@ -2,13 +2,13 @@
   <div>
     <v-row>
       <v-col cols="1" align="left">
-        <v-btn tile large @click="goToBoard('Home')">
+        <v-btn tile large block @click="goToBoard('Home')">
           <v-icon left>mdi-home</v-icon>
           Back
         </v-btn>
       </v-col>
       <v-col cols="3" align="left">
-        <p class="text-h4">{{ project.name }}</p>
+        <p class="text-h3">{{ project.name }}</p>
       </v-col>
       <v-col class="text-right d-flex align-stretch">
         <time-tracker></time-tracker>
