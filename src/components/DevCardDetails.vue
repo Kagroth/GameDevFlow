@@ -51,11 +51,8 @@
                   :gameCardComponent="gameCardComponent"
                 ></worked-time-indicator>
               </v-col>
-              <v-col cols="3">
-                <v-btn outlined tile small color="primary">
-                  <v-icon left small>mdi-play</v-icon>
-                  Start
-                </v-btn>
+              <v-col cols="3" class="text-center">
+                <change-card-component-state-button :gameComponent="gameCardComponent"></change-card-component-state-button>
               </v-col>
             </v-row>
             <v-row>
@@ -113,10 +110,7 @@
                         ></worked-time-indicator>
                       </v-col>
                       <v-col cols="3">
-                        <v-btn outlined tile small color="primary">
-                          <v-icon left small>mdi-play</v-icon>
-                          Start
-                        </v-btn>
+                        <change-card-component-state-button :gameComponent="gameCardComponent"></change-card-component-state-button>
                       </v-col>
                     </v-row>
                   </v-tab-item>
@@ -130,6 +124,7 @@
   </div>
 </template>
 <script>
+import ChangeCardComponentStateButton from "@/components/ChangeCardComponentStateButton";
 import WorkedTimeIndicator from "@/components/WorkedTimeIndicator";
 
 export default {
@@ -139,6 +134,7 @@ export default {
   },
 
   components: {
+    "change-card-component-state-button": ChangeCardComponentStateButton,
     "worked-time-indicator": WorkedTimeIndicator,
   },
 

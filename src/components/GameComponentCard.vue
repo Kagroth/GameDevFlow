@@ -30,12 +30,11 @@
         </v-col>
       </v-row>
     </v-card-title>
-    
-      <v-row>
-        <v-col cols="12">
-          <v-divider></v-divider>
-        </v-col>
-      </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-divider></v-divider>
+      </v-col>
+    </v-row>
     <v-card-title class="text-subtitle-1 pb-1">
       <v-row>
         <v-col cols="2">
@@ -52,135 +51,9 @@
           </span>
         </v-col>
         <v-col cols="3" v-if="controls" class="text-right pr-3 pt-2">
-          <v-btn
-            v-if="
-              gameComponent.cardState === CARD_STATES.NOT_STARTED ||
-              gameComponent.cardState === CARD_STATES.PROTOTYPE
-            "
-            x-small
-            outlined
-            tile
-            color="primary"
-            @click="updateState(CARD_STATES.PROTOTYPING)"
-          >
-            <v-icon left>mdi-play</v-icon>
-            Start
-          </v-btn>
-          <div v-else-if="gameComponent.cardState === CARD_STATES.PROTOTYPING">
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="yellow darken-3"
-              @click="updateState(CARD_STATES.PROTOTYPE)"
-            >
-              <v-icon left>mdi-pause</v-icon>
-              Pause
-            </v-btn>
-            <div class="py-1"></div>
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="red darken-2"
-              @click="updateState(CARD_STATES.TO_DO)"
-            >
-              <v-icon left>mdi-stop</v-icon>
-              End
-            </v-btn>
-          </div>
-
-          <v-btn
-            v-if="gameComponent.cardState === CARD_STATES.TO_DO"
-            x-small
-            outlined
-            tile
-            color="primary"
-            @click="updateState(CARD_STATES.PRODUCTION)"
-          >
-            <v-icon left>mdi-play</v-icon>
-            Start
-          </v-btn>
-
-          <div v-else-if="gameComponent.cardState === CARD_STATES.PRODUCTION">
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="yellow darken-3"
-              @click="updateState(CARD_STATES.TO_DO)"
-            >
-              <v-icon left>mdi-pause</v-icon>
-              Pause
-            </v-btn>
-            <div class="py-1"></div>
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="red darken-2"
-              @click="updateState(CARD_STATES.TO_POLISH)"
-            >
-              <v-icon left>mdi-stop</v-icon>
-              End
-            </v-btn>
-          </div>
-
-          <div v-else-if="gameComponent.cardState === CARD_STATES.TO_POLISH">
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="primary"
-              @click="updateState(CARD_STATES.POLISHING)"
-            >
-              <v-icon left>mdi-play</v-icon>
-              Start
-            </v-btn>
-            <div class="py-1"></div>
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="yellow darken-3"
-              @click="updateState(CARD_STATES.POLISHED)"
-            >
-              <v-icon left>mdi-stop</v-icon>
-              Finish
-            </v-btn>
-          </div>
-
-          <div v-else-if="gameComponent.cardState === CARD_STATES.POLISHING">
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="yellow darken-3"
-              @click="updateState(CARD_STATES.TO_POLISH)"
-            >
-              <v-icon left>mdi-pause</v-icon>
-              Pause
-            </v-btn>
-            <div class="py-1"></div>
-            <v-btn
-              x-small
-              outlined
-              block
-              tile
-              color="red darken-2"
-              @click="updateState(CARD_STATES.POLISHED)"
-            >
-              <v-icon left>mdi-stop</v-icon>
-              End
-            </v-btn>
-          </div>
+          <change-card-component-state-button
+            :gameComponent="gameComponent"
+          ></change-card-component-state-button>
         </v-col>
       </v-row>
     </v-card-title>
@@ -209,22 +82,18 @@
           <v-icon small color="primary">mdi-timer-sand</v-icon>
         </v-col>
         <v-col class="d-flex align-center">
-          <v-progress-linear 
-            height="100%"
-            :value="workProgress(gameComponent)" 
-            :color="workProgress(gameComponent) > gameComponent.effort ? 'red darken-3' : 'primary'">
-            <template v-slot:default>
-              <div>
-                {{ convertFromMiliseconds(gameComponent.workedTime) }}
-              </div>
-            </template>
-          </v-progress-linear>
+          <worked-time-indicator
+            :gameCardComponent="gameComponent"
+          ></worked-time-indicator>
         </v-col>
       </v-row>
     </v-card-text>
   </v-card>
 </template>
 <script>
+import ChangeCardComponentStateButton from "@/components/ChangeCardComponentStateButton";
+import WorkedTimeIndicator from "@/components/WorkedTimeIndicator";
+
 export default {
   props: {
     cardTitle: String,
@@ -240,49 +109,9 @@ export default {
     },
   },
 
-  methods: {
-    updateState(newState) {
-      const payload = {
-        cardComponent: this.gameComponent,
-        newState: newState,
-      }
-
-      this.$store.commit("devBoard/changeCardComponentState", payload);
-      
-      if (newState === this.CARD_STATES.PROTOTYPING ||
-          newState === this.CARD_STATES.PRODUCTION ||
-          newState === this.CARD_STATES.POLISHING) {
-          this.$store.commit("timeTracker/startTimeTracking", payload);
-          return
-      }
-
-      if (newState === this.CARD_STATES.PROTOTYPE ||
-          newState === this.CARD_STATES.TO_DO ||
-          newState === this.CARD_STATES.TO_POLISH) {
-          this.$store.commit("timeTracker/stopTimeTracking");
-          return
-      }
-   },
-
-   convertFromMiliseconds(ms) {
-      let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-      let minutes = Math.floor((ms / (1000 * 60)) % 60);
-      let seconds = Math.floor((ms / 1000) % 60);
-
-      hours = hours < 10 ? "0" + hours : hours;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-
-      return `${hours}:${minutes}:${seconds}`;
-    },
-
-   workProgress(cardComponent) {
-      const workedTimeInMiliseconds = cardComponent.workedTime
-      const estimatedEffortInHours = cardComponent.effort
-      const estimatedEffortInMiliseconds = estimatedEffortInHours * 60 * 60 * 1000
-
-      return workedTimeInMiliseconds / estimatedEffortInMiliseconds * 100
-    }
+  components: {
+    "change-card-component-state-button": ChangeCardComponentStateButton,
+    "worked-time-indicator": WorkedTimeIndicator,
   },
 
   computed: {

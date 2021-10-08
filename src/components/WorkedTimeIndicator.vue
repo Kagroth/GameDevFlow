@@ -3,13 +3,13 @@
       height="100%"
       :value="workProgress(gameCardComponent)"
       :color="
-        workProgress(gameCardComponent) > gameCardComponent.effort
+        gameCardComponent.workedTime > hoursToMiliseconds(gameCardComponent.effort)
           ? 'red darken-3'
           : 'primary'
       "
     >
       <template v-slot:default>
-        <div>
+        <div class="text-caption">
           {{ convertFromMiliseconds(gameCardComponent.workedTime) }}
         </div>
       </template>
@@ -43,6 +43,10 @@ export default {
 
       return (workedTimeInMiliseconds / estimatedEffortInMiliseconds) * 100;
     },
+
+    hoursToMiliseconds(hours) {
+        return hours * 60 * 60 * 1000;
+    }
   },
 };
 </script>
