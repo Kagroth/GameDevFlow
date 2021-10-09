@@ -2,13 +2,34 @@
   <div>
     <v-row>
       <v-col cols="1" align="left">
-        <v-btn tile large block @click="goToBoard('Home')">
+        <v-btn tile block @click="goToBoard('Home')">
           <v-icon left>mdi-home</v-icon>
           Back
         </v-btn>
       </v-col>
+      <v-col cols="1">
+        <v-menu offset-y rounded="0">
+          <template v-slot:activator="{on, attrs}">
+            <v-btn tile v-bind="attrs" v-on="on">
+              Actions
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title>
+                <v-btn tile block color="red darken-2" @click="clearCards">Clear cards</v-btn>
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>
+                <v-btn tile block color="red darken-2" disabled>Delete project</v-btn>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-col>
       <v-col cols="3" align="left">
-        <p class="text-h3">{{ project.name }}</p>
+        <p class="text-h4 pl-4">{{ project.name }}</p>
       </v-col>
       <v-col class="text-right d-flex align-stretch">
         <time-tracker></time-tracker>
@@ -52,6 +73,10 @@ export default {
     goToBoard(boardName) {
       this.$router.push({ name: boardName });
     },
+
+    clearCards() {
+      this.$store.commit("devBoard/clearCards", this.$route.params.projectName)
+    }
   },
 };
 </script>

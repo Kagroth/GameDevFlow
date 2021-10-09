@@ -1,11 +1,6 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="2">
-        <v-btn color="red darken-2" @click="clearCards" tile>Clear cards</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="12">
         <v-row>
           <v-col cols="2" class="px-1">
@@ -107,10 +102,6 @@ export default {
     onCardCreate(createdCardData) {
         this.$store.commit("devBoard/addCard", createdCardData)
     },
-
-    clearCards() {
-      this.$store.commit("devBoard/clearCards", this.$route.params.projectName)
-    }
   },
 
   computed: {
