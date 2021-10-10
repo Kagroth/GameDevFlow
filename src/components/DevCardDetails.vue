@@ -46,13 +46,15 @@
                 {{ gameCardComponent.effort }}
                 <v-icon small color="primary">mdi-timer-sand</v-icon>
               </v-col>
-              <v-col cols="3" class="d-flex align-center">
+              <v-col cols="3">
                 <worked-time-indicator
                   :gameCardComponent="gameCardComponent"
                 ></worked-time-indicator>
               </v-col>
               <v-col cols="3" class="text-center">
-                <change-card-component-state-button :gameComponent="gameCardComponent"></change-card-component-state-button>
+                <change-card-component-state-button
+                  :gameComponent="gameCardComponent"
+                ></change-card-component-state-button>
               </v-col>
             </v-row>
             <v-row>
@@ -110,7 +112,9 @@
                         ></worked-time-indicator>
                       </v-col>
                       <v-col cols="3">
-                        <change-card-component-state-button :gameComponent="gameCardComponent"></change-card-component-state-button>
+                        <change-card-component-state-button
+                          :gameComponent="gameCardComponent"
+                        ></change-card-component-state-button>
                       </v-col>
                     </v-row>
                   </v-tab-item>

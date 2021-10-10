@@ -36,7 +36,7 @@
       </v-col>
     </v-row>
     <div class="my-4"></div>
-    <v-toolbar>
+    <v-toolbar flat>
       <v-toolbar-items>
         <v-btn class="pa-6" @click="goToBoard('DesignBoard')" tile>
           <v-icon left color="blue">mdi-pencil-ruler</v-icon>
