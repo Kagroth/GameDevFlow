@@ -1,6 +1,6 @@
 <template>
     <v-progress-linear
-      height="100%"
+      height="20"
       :value="workProgress(gameCardComponent)"
       :color="
         gameCardComponent.workedTime > hoursToMiliseconds(gameCardComponent.effort)

@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-card>
-      <v-card-title>
+      <v-card-title class="pb-2">
         <v-row>
-          <v-col cols="3" class="text-left">To do</v-col>
-          <v-col cols="9" class="px-0"> </v-col>
+          <v-col cols="3" class="text-left pb-1">To do</v-col>
+          <v-col cols="9" class="px-0 pb-1"> </v-col>
         </v-row>
       </v-card-title>
       <v-card-subtitle class="mt-1 px-0">
@@ -40,59 +40,72 @@
               </v-tab>
             </v-tabs>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" class="px-1">
             <v-tabs-items v-model="selectedTab">
               <!-- To Prototype Tab -->
               <v-tab-item class="my-3">
-                <v-row
-                  v-for="(cardComponent, index) in filteredCardComponents"
-                  :key="`card-component-to-prototype-${index}`"
+                <v-virtual-scroll
+                  :bench="2"
+                  :items="filteredCardComponents"
+                  :height="160 * 5"
+                  :item-height="160"
+                  :width="800"
                 >
-                  <v-col cols="12" class="py-1">
-                    <game-component-card
-                      :cardTitle="cardComponent.title"
-                      :stateName="cardComponent.stateName"
-                      :gameComponent="cardComponent.gameCardComponent"
-                      controls
-                    ></game-component-card>
-                  </v-col>
-                </v-row>
+                  <template v-slot:default="{ item }">
+                    <div class="pa-1">
+                      <game-component-card
+                        :cardTitle="item.title"
+                        :stateName="item.stateName"
+                        :gameComponent="item.gameCardComponent"
+                        controls
+                      ></game-component-card>
+                    </div>
+                  </template>
+                </v-virtual-scroll>
               </v-tab-item>
 
               <!-- To Production Tab -->
               <v-tab-item class="my-3">
-                <v-row
-                  v-for="(cardComponent, index) in filteredCardComponentsToDo"
-                  :key="`card-component-to-do-${index}`"
+                <v-virtual-scroll
+                  :bench="2"
+                  :items="filteredCardComponentsToDo"
+                  :height="160 * 5"
+                  :item-height="160"
+                  :width="800"
                 >
-                  <v-col cols="12" class="py-1">
-                    <game-component-card
-                      :cardTitle="cardComponent.title"
-                      :stateName="cardComponent.stateName"
-                      :gameComponent="cardComponent.gameCardComponent"
-                      controls
-                    ></game-component-card>
-                  </v-col>
-                </v-row>
+                  <template v-slot:default="{ item }">
+                    <div class="pa-1">
+                      <game-component-card
+                        :cardTitle="item.title"
+                        :stateName="item.stateName"
+                        :gameComponent="item.gameCardComponent"
+                        controls
+                      ></game-component-card>
+                    </div>
+                  </template>
+                </v-virtual-scroll>
               </v-tab-item>
 
               <!-- To Polish Tab -->
               <v-tab-item class="my-3">
-                <v-row
-                  v-for="(
-                    cardComponent, index
-                  ) in filteredCardComponentsToPolish"
-                  :key="`card-component-to-do-${index}`"
+                <v-virtual-scroll
+                  :bench="2"
+                  :items="filteredCardComponentsToPolish"
+                  :height="160 * 5"
+                  :item-height="160"
+                  :width="800"
                 >
-                  <v-col cols="12" class="py-1">
-                    <game-component-card
-                      :cardTitle="cardComponent.title"
-                      :stateName="cardComponent.stateName"
-                      :gameComponent="cardComponent.gameCardComponent"
-                      controls
-                    ></game-component-card>
-                  </v-col>
-                </v-row>
+                  <template v-slot:default="{ item }">
+                    <div class="pa-1">
+                      <game-component-card
+                        :cardTitle="item.title"
+                        :stateName="item.stateName"
+                        :gameComponent="item.gameCardComponent"
+                        controls
+                      ></game-component-card>
+                    </div>
+                  </template>
+                </v-virtual-scroll>
               </v-tab-item>
             </v-tabs-items>
           </v-col>
@@ -169,17 +182,13 @@ export default {
           return componentFilter.builtInComponent.name;
         });
 
-      return cardComponentsArray.filter(
-        (cardComponent) => {
-          if (
-            activeFilters.includes(cardComponent.gameCardComponent.gec.name)
-          ) {
-            return true;
-          }
-
-          return false;
+      return cardComponentsArray.filter((cardComponent) => {
+        if (activeFilters.includes(cardComponent.gameCardComponent.gec.name)) {
+          return true;
         }
-      );
+
+        return false;
+      });
     },
   },
 
@@ -216,18 +225,35 @@ export default {
 
     // To Prototype cards filtered
     filteredCardComponents() {
-      return this.applyFilters(this.cardComponentsWithCardTitleToPrototype)
+      return this.applyFilters(this.cardComponentsWithCardTitleToPrototype);
     },
 
     // To Production cards filtered
     filteredCardComponentsToDo() {
-      return this.applyFilters(this.cardComponentsWithCardTitleToDo)
+      return this.applyFilters(this.cardComponentsWithCardTitleToDo);
     },
 
     // To Production cards filtered
     filteredCardComponentsToPolish() {
-      return this.applyFilters(this.cardComponentsWithCardTitleToPolish)
+      return this.applyFilters(this.cardComponentsWithCardTitleToPolish);
     },
   },
 };
 </script>
+<style>
+.v-virtual-scroll {
+  overflow-x: hidden;
+}
+
+.v-virtual-scroll::-webkit-scrollbar {
+  width: 0.1rem;
+}
+
+.v-virtual-scroll::-webkit-scrollbar-track {
+  background-color: #0D47A1;
+}
+
+.v-virtual-scroll::-webkit-scrollbar-thumb {
+  background-color: #2979FF;
+}
+</style>
